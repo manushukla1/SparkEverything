@@ -42,6 +42,27 @@ print(splitrdd.collect())
 splitrddd = tildrdd.flatMap(lambda x : x.split("~"))
 print(splitrddd.collect())
 
+# use case -- question
+
+liststate = [
+                "State->TN~CITY->Chennai","State->Kerela~CITY->Trivandrum"
+            ]
+
+# flatten it and return states and city as different lists
+
+rddliststate = sc.parallelize(liststate) # converted to rdd
+
+flattenit = rddliststate.flatMap(lambda x : x.split("~"))
+print(flattenit.collect())
+
+statefilter = flattenit.filter(lambda x : "State" in x)
+print(statefilter.collect())
+
+onlystate = statefilter.map(lambda x : x.replace("State->",""))
+print(onlystate.collect())
+
+onlycity = rddliststate.flatMap(lambda x : x.split("~")).filter(lambda x : "CITY" in x).map(lambda x : x.replace("CITY->",""))
+print(onlycity.collect())
 
 
 
