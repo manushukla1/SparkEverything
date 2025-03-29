@@ -59,3 +59,6 @@ data.foreach(print)
 onlycity = data.flatMap(lambda x : x.split("~")).filter(lambda x : "City" in x).map(lambda x : x.replace("City->",""))
 print(onlycity.collect())
 
+dataus = sc.textFile("usdata.csv")
+usd = dataus.filter(lambda x : len(x) >200).flatMap(lambda x : x.split(",")).map(lambda x : x.replace("~",""))
+print(usd.collect())
