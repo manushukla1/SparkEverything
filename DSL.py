@@ -51,3 +51,25 @@ spark.read.format("csv").load("data/test.txt").toDF("Success").show(20, False)
 
 
 ##################🔴🔴🔴🔴🔴🔴 -> DONT TOUCH ABOVE CODE -- TYPE BELOW ####################################
+"""
+datadt = sc.textFile("dt.txt")  # file read
+# modifiy the data to make it as a table then perform execution becuase the columns are not defined
+from collections import namedtuple
+mapsplit = datadt.map(lambda x : x.split(",")) # just split the data into better format
+columns  = namedtuple ("columns", ['tno','tdata', 'amount', 'category','product','mode'])
+schemardd = mapsplit.map(lambda x : columns(x[0], x[1],x[2], x[3], x[4], x[5]))
+filterrdd = schemardd.filter(lambda x : 'Gymnastics' in x.product) # from the exact 5th column
+print(filterrdd.collect())
+
+ # convert rdd into df
+df = filterrdd.toDF()
+df.show()
+df.write.parquet("file:///Users/manushukla/downloads/write/")
+"""
+csvdf  = spark.read.format("csv").option("header","true").load("usdata.csv")
+csvdf.show()
+
+csvdf.createOrReplaceTempView("tablename")
+
+procdf = spark.sql("select * from tablename where state = 'LA'")
+procdf.show()
