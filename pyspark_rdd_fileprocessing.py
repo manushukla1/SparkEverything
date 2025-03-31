@@ -52,8 +52,10 @@ spark.read.format("csv").load("data/test.txt").toDF("Success").show(20, False)
 
 ##################🔴🔴🔴🔴🔴🔴 -> DONT TOUCH ABOVE CODE -- TYPE BELOW ####################################
 
-# what if the data is present in a text flie
+# what if the data is present in a text file
 
+from collections import namedtuple
+"""
 data = sc.textFile("state.txt")
 data.foreach(print)
 onlycity = data.flatMap(lambda x : x.split("~")).filter(lambda x : "City" in x).map(lambda x : x.replace("City->",""))
@@ -62,3 +64,22 @@ print(onlycity.collect())
 dataus = sc.textFile("usdata.csv")
 usd = dataus.filter(lambda x : len(x) >200).flatMap(lambda x : x.split(",")).map(lambda x : x.replace("~",""))
 print(usd.collect())
+usd.foreach(print)
+
+condata= usd.map(lambda x : x + "zeyo")
+condata.foreach(print)
+
+# new file read
+"""
+datadt = sc.textFile("dt.txt")  # file read
+# modifiy the data to make it as a table then perform execution becuase the columns are not defined
+
+mapsplit = datadt.map(lambda x : x.split(",")) # just split the data into better format
+columns  = namedtuple ("columns", ['tno','tdata', 'amount', 'category','product','mode'])
+schemardd = mapsplit.map(lambda x : columns(x[0], x[1],x[2], x[3], x[4], x[5]))
+filterrdd = schemardd.filter(lambda x : 'Gymnastics' in x.product) # from the exact 5th column
+print(filterrdd.collect())
+
+
+
+
