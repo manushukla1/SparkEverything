@@ -59,5 +59,9 @@ data = [("00000000", "06-26-2011", 200, "Exercise", "GymnasticsPro", "cash"),
     ("00000005", "02-14-2011", 200, "Gymnastics", None, "cash")]
 
 df = spark.createDataFrame(data, ["id","tdate","amount","category","product","spending"])
-
-
+ #df.createOrReplaceTempView("df") only use for sql
+""" this is sql way 
+procdf = spark.sql("select upper(category) as cat from df")
+procdf.show()
+"""
+# now dsl way
