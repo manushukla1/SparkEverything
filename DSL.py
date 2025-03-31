@@ -73,3 +73,21 @@ csvdf.createOrReplaceTempView("tablename")
 
 procdf = spark.sql("select * from tablename where state = 'LA'")
 procdf.show()
+
+data = [("00000000", "06-26-2011", 200, "Exercise", "GymnasticsPro", "cash"),
+    ("00000001", "05-26-2011", 300, "Exercise", "Weightlifting", "credit"),
+    ("00000002", "06-01-2011", 100, "Exercise", "GymnasticsPro", "cash"),
+    ("00000003", "06-05-2011", 100, "Gymnastics", "Rings", "credit"),
+    ("00000004", "12-17-2011", 300, "Team Sports", "Field", "paytm"),
+    ("00000005", "02-14-2011", 200, "Gymnastics", None, "cash")]
+
+df = spark.createDataFrame(data, ["id","tdate","amount","category","product","spending"])
+df.show()
+
+df.createOrReplaceTempView("df")
+
+prodf = df.select("id","tdate") #.groupby, .filter, .join, .aggregation all are dsl functions
+prodf.show()
+
+mulcol = df.filter ("category = 'Exercise' or spending = 'cash'")
+mulcol.show()
